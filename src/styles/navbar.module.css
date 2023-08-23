@@ -1,0 +1,46 @@
+/* navbar.module.css */
+.nav {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 0;
+  height: 55px;
+  display: flex;
+}
+.logo{
+    margin-left: 10px;
+    height: 55px;
+    width: 15%;
+}
+.searchContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  width: 80%;
+}
+
+input {
+  padding: 5px;
+  border: none;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 30%;
+  height: 60%;
+
+}
+
+#searchBtn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  font-size: large;
+  border-radius: 4px;
+  padding: 10px 7px;
+  border-radius: 15px;
+  cursor: pointer;
+
+}
+
+#searchBtn:hover {
+  background-color: #c0392b;
+}
