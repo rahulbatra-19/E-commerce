@@ -12,7 +12,7 @@ function ProductCard(props) {
         <div className={styles.plot}> {product.description}</div>
         <div className={styles.rating}>{product.rating} ⭐️</div>
         <div className={styles.footer}>
-          <div className={styles.price}> ₹{product.price}</div>
+          <div className={styles.price}> ${product.price}</div>
           <div className={styles.CartBtn}>Add to Cart</div>
         </div>
       </div>

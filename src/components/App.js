@@ -10,15 +10,22 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         const { products } = data;
+        const filters = [];
+        products.map((product) => {
+          if (!filters.includes(product.category)) {
+            filters.push(product.category);
+          }
+        });
+        // console.log("filter", filters);
         setData(products.splice(0, 10));
       });
   }, [data]);
   return (
     <div className="App">
-      <Navbar />
+      <Navbar />{" "}
       {data.map((product, index) => (
         <ProductCard product={product} key={`product-${index}`} />
-      ))}
+      ))}{" "}
     </div>
   );
 }
