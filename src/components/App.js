@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Profiler, useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import Navbar from "./Navbar";
 import styles from "../styles/app.module.css";
@@ -7,6 +7,9 @@ function App() {
   const [categories, setCatergories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [fetched, setFetched] = useState(false);
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [brands, setBrand] = useState([]);
+  const [categoryProducts, setCategoryProducts] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,7 +72,16 @@ function App() {
       const response = await fetch(apiurl);
       const jsondata = await response.json();
       const { products } = jsondata;
-      setData(products.slice(0, 10));
+      setCategoryProducts(products);
+      setData(products);
+      const brands = [];
+      products.map((product) => {
+        if (!brands.includes(product.brand)) {
+          brands.push(product.brand);
+        }
+      });
+      setBrand(brands);
+      setShowMoreFilters(true);
     } catch (error) {
       console.error("Error fetching Category:", error);
     }
@@ -89,6 +101,15 @@ function App() {
     const selectedCategory = event.target.value;
     // console.log(selectedCategory);
     setSelectedCategory(selectedCategory);
+    setCatergories([selectedCategory]);
+  };
+  const handleBrandChange = (event) => {
+    const selectedBrand = event.target.value;
+    console.log("brand", selectedBrand);
+    const products = categoryProducts.filter(
+      (product) => product.brand === selectedBrand
+    );
+    setData(products);
   };
 
   return (
@@ -99,7 +120,11 @@ function App() {
           <span>Filters: </span>
           <button
             className={styles.noFilterButton}
-            onClick={() => setSelectedCategory("")}
+            onClick={() => {
+              setSelectedCategory("");
+              setShowMoreFilters(false);
+              fetchCategories();
+            }}
           >
             No filter
           </button>
@@ -117,6 +142,57 @@ function App() {
               <label htmlFor={`filter-${index}`}>{category}</label>
             </div>
           ))}
+          {showMoreFilters && (
+            <div>
+              <span>Brands:</span>
+              {brands.map((brand, index) => (
+                <div className={styles.category}>
+                  <input
+                    type="radio"
+                    id={`${brand}-${index}`}
+                    key={`${brand}-${index}`}
+                    name="brand"
+                    value={brand}
+                    onChange={handleBrandChange}
+                  />
+                  <label htmlFor={`${brand}-${index}`}>{brand}</label>
+                </div>
+              ))}
+              <span>Price: </span>
+              <div className={styles.category}>
+                <input
+                  type="radio"
+                  id="price-asc"
+                  key="price-asc"
+                  name="price"
+                  value="price-asc"
+                  onChange={() => {
+                    const sortedProducts = [...data].sort(
+                      (a, b) => a.price - b.price
+                    );
+                    setData(sortedProducts);
+                  }}
+                />
+                <label htmlFor="price-asc">Low to High</label>
+              </div>
+              <div className={styles.category}>
+                <input
+                  type="radio"
+                  id="price-dsc"
+                  key="price-dsc"
+                  name="price"
+                  value="price-dsc"
+                  onChange={() => {
+                    const sortedProducts = [...data].sort(
+                      (a, b) => b.price - a.price
+                    );
+                    setData(sortedProducts);
+                  }}
+                />
+                <label htmlFor="price-dsc">High to Low</label>
+              </div>
+            </div>
+          )}
         </div>
         <div className={styles.products}>
           {data.map((product, index) => (
