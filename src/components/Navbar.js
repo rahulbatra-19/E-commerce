@@ -18,6 +18,7 @@ const Navbar = () => {
     } else {
       setShowSearch(false);
       setSearch("");
+      setSearchProduct([]);
     }
   }, [search, searchText]);
   return (
